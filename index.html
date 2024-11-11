@@ -72,29 +72,14 @@
         const gallery = document.getElementById('gallery');
         const preview = document.getElementById('preview');
 
-        // Fetch images from the server
-        async function fetchImages() {
-            try {
-                const response = await fetch('list-images.php'); // Fetch JSON from PHP script
-                imageUrls = await response.json();
-                displayThumbnails();
-            } catch (error) {
-                console.error('Error fetching images:', error);
-            }
-        }
-
         // Display thumbnails
-        function displayThumbnails() {
-            gallery.innerHTML = '';
-            imageUrls.forEach((url, index) => {
-                const img = document.createElement('img');
-                img.src = url;
-                img.classList.add('thumbnail');
-                img.onclick = () => showPreview(index);
-                gallery.appendChild(img);
-            });
-            showPreview(0); // Show the first image as a preview
-        }
+        imageUrls.forEach((url, index) => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.classList.add('thumbnail');
+            img.onclick = () => showPreview(index);
+            gallery.appendChild(img);
+        });
 
         // Show preview of selected image
         function showPreview(index) {
@@ -130,9 +115,6 @@
                 link.click();
             });
         }
-
-        // Fetch and display images on page load
-        fetchImages();
     </script>
 
 </body>
