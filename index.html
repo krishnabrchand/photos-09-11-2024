@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        .thumbnail {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .preview {
+            width: 500px;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .download {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="gallery" id="gallery"></div>
+
+    <img id="preview" class="preview" src="" alt="Preview Image">
+
+    <div class="controls">
+        <button onclick="prevImage()">Previous</button>
+        <button onclick="nextImage()">Next</button>
+        <button onclick="downloadImage()">Download Selected</button>
+        <button onclick="downloadAll()">Download All</button>
+    </div>
+
+    <script>
+        let imageUrls = [];
+        let currentIndex = 0;
+
+        const gallery = document.getElementById('gallery');
+        const preview = document.getElementById('preview');
+
+        // Fetch images from the server
+        async function fetchImages() {
+            try {
+                const response = await fetch('list-images.php'); // Fetch JSON from PHP script
+                imageUrls = await response.json();
+                displayThumbnails();
+            } catch (error) {
+                console.error('Error fetching images:', error);
+            }
+        }
+
+        // Display thumbnails
+        function displayThumbnails() {
+            gallery.innerHTML = '';
+            imageUrls.forEach((url, index) => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.classList.add('thumbnail');
+                img.onclick = () => showPreview(index);
+                gallery.appendChild(img);
+            });
+            showPreview(0); // Show the first image as a preview
+        }
+
+        // Show preview of selected image
+        function showPreview(index) {
+            currentIndex = index;
+            preview.src = imageUrls[currentIndex];
+        }
+
+        // Navigate images
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % imageUrls.length;
+            showPreview(currentIndex);
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
+            showPreview(currentIndex);
+        }
+
+        // Download selected image
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.href = imageUrls[currentIndex];
+            link.download = `image${currentIndex + 1}.jpg`;
+            link.click();
+        }
+
+        // Download all images
+        function downloadAll() {
+            imageUrls.forEach((url, index) => {
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `image${index + 1}.jpg`;
+                link.click();
+            });
+        }
+
+        // Fetch and display images on page load
+        fetchImages();
+    </script>
+
+</body>
+
+</html>
