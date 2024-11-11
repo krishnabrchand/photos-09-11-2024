@@ -6,17 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Gallery</title>
     <style>
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 150px);
+            gap: 10px;
+        }
+
+        .thumbnail-wrapper {
+            width: 150px;
+            height: 150px;
+        }
+
         .thumbnail {
-            width: 100px;
-            height: 100px;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             cursor: pointer;
             margin: 5px;
-        }
-
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
         }
 
         .preview {
@@ -38,11 +44,8 @@
 </head>
 
 <body>
-
     <div class="gallery" id="gallery"></div>
-
     <img id="preview" class="preview" src="" alt="Preview Image">
-
     <div class="controls">
         <button onclick="prevImage()">Previous</button>
         <button onclick="nextImage()">Next</button>
@@ -52,20 +55,20 @@
 
     <script>
         let imageUrls = [
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5560.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5561.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5562.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5563.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5564.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5565.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5566.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5567.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5568.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5569.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5570.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5571.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5572.JPG",
-            "https://github.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5573.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5560.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5561.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5562.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5563.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5564.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5565.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5566.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5567.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5568.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5569.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5570.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5571.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5572.JPG",
+            "https://raw.githubusercontent.com/krishnabrchand/photos-09-11-2024/main/photos/DSCF5573.JPG",
         ];
         let currentIndex = 0;
 
@@ -74,11 +77,21 @@
 
         // Display thumbnails
         imageUrls.forEach((url, index) => {
+            // Create a wrapper div
+            const imgWrapper = document.createElement('div');
+            imgWrapper.classList.add('thumbnail-wrapper'); // Add any necessary classes
+
+            // Create the image element
             const img = document.createElement('img');
             img.src = url;
             img.classList.add('thumbnail');
             img.onclick = () => showPreview(index);
-            gallery.appendChild(img);
+
+            // Append the image to the wrapper div
+            imgWrapper.appendChild(img);
+
+            // Append the wrapper div to the gallery
+            gallery.appendChild(imgWrapper);
         });
 
         // Show preview of selected image
@@ -86,6 +99,8 @@
             currentIndex = index;
             preview.src = imageUrls[currentIndex];
         }
+
+        showPreview(0);
 
         // Navigate images
         function nextImage() {
